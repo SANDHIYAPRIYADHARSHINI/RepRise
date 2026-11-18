@@ -162,7 +162,7 @@ The script starts local Auth/Firestore emulators using `demo-reprise`, downloads
 ## Netlify deployment
 
 1. In Netlify, import [RepRise from GitHub](https://github.com/SANDHIYAPRIYADHARSHINI/RepRise) and select `main` as the production branch.
-2. Build from the repository root. Netlify reads Node.js 24 from `.nvmrc` and detects Next.js. Keep the suggested build command (`next build`) and publish directory (`.next`) so the Next.js adapter can serve page routes and `/api/health`.
+2. Build from the repository root. Netlify reads Node.js 24 from `.nvmrc` and uses the build command and `.next` publish directory in `netlify.toml`. The Next.js adapter serves page routes and `/api/health`.
 3. For a demo deployment, leave the Firebase variables unset. For real accounts, set all six Firebase Web variables before building, deploy the Firestore rules and indexes to that project, and add the Netlify hostname to Firebase Auth authorized domains. Redeploy after changing environment variables.
 4. Open the site over HTTPS and check `/api/health`. To run the demo browser suite against the deployment, set `PLAYWRIGHT_BASE_URL` to the site URL and run `npm run test:demo:ui`.
 
