@@ -2,7 +2,7 @@
 
 A mobile-first fitness companion with on-device AI rep counting, guided workouts, nutrition planning, and Firebase account sync.
 
-**Netlify demo (team access)** · [Open RepRise](https://lambent-empanada-40cb73.netlify.app/)
+**Live demo on Netlify** · [Open RepRise](https://lambent-empanada-40cb73.netlify.app/)
 
 ## Problem statement
 
