@@ -1,10 +1,12 @@
 import { exercises } from "../../src/data/exercises";
 import { test, expect, type Page } from "@playwright/test";
 const errors = new WeakMap<Page, string[]>();
+const openingAccountLogin = new WeakSet<Page>();
 const firebaseConfigured = process.env.PLAYWRIGHT_FIREBASE_CONFIGURED === "1";
 test.beforeEach(async ({ page }) => {
   if (firebaseConfigured) {
     await page.addInitScript(() => {
+      if (window.top !== window) return;
       const key = "gymsense:mode:v1";
       if (!sessionStorage.getItem(key)) sessionStorage.setItem(key, "demo");
     });
@@ -18,6 +20,7 @@ test.beforeEach(async ({ page }) => {
   await page.route(
     /https:\/\/[^/]*(googleapis\.com|firebaseio\.com|firebaseapp\.com)/,
     (route) => {
+      if (openingAccountLogin.has(page)) return route.continue();
       messages.push("Demo attempted a Firebase request");
       return route.abort();
     },
@@ -136,6 +139,7 @@ test("Firebase login and Bob demo re-entry work", async ({
   page,
 }) => {
   await page.goto("/dashboard");
+  if (firebaseConfigured) openingAccountLogin.add(page);
   await page
     .getByRole("button", { name: "Firebase login", exact: true })
     .click();
@@ -149,6 +153,7 @@ test("Firebase login and Bob demo re-entry work", async ({
     .getByRole("button", { name: "Bob (demo login)", exact: true })
     .click();
   await expect(page).toHaveURL(/\/$/);
+  openingAccountLogin.delete(page);
   await expect(
     page.getByRole("heading", { name: "What are you working toward?" }),
   ).toBeVisible();

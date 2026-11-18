@@ -29,7 +29,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       .split(/\s+/)
       .slice(0, 2)
       .map((s) => s[0])
-      .join("") ?? "GS";
+      .join("") ?? "RR";
   return (
     <>
       <aside className="sidebar">
