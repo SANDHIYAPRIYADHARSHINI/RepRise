@@ -56,7 +56,7 @@ npm run dev
 
 Open http://localhost:3000/dashboard. With no Firebase configuration, RepRise automatically opens **Demo mode**. Every application route works, including plans, exercises, diet, runs, friends, and profile. No API keys, account, or Firebase console setup is needed for this mode.
 
-The demo uses Alex Johnson and synthetic activity, with Maya as an accepted friend and an incoming request from Jordan. Dates follow the current UTC day. Sample edits persist in sessionStorage for this tab across refreshes. **Reset demo** restores the sample workspace; **Firebase login** exits to real-account setup. With Firebase configured, the login/error screen also offers **Continue in demo mode**. A configured account failure never silently changes to demo mode.
+Choose **Bob (demo login)** on the sign-in page to enter the sample workspace. It uses synthetic activity, with Maya as an accepted friend and an incoming request from Jordan. Dates follow the current UTC day. Sample edits persist in sessionStorage for this tab across refreshes. **Reset demo** restores the sample workspace, and **Firebase login** returns to account sign-in. If an account fails to load, you can still choose Bob from the error screen.
 
 Demo records are isolated from Firebase and are never uploaded, imported into a real account, or used to authenticate against Firestore. Closing the tab ends its normal demo session (browser session restoration can restore sessionStorage). If storage is blocked, the demo remains usable in memory and shows that refresh will reset it.
 
@@ -166,7 +166,7 @@ The script starts local Auth/Firestore emulators using `demo-reprise`, downloads
 1. In Netlify, import [RepRise from GitHub](https://github.com/SANDHIYAPRIYADHARSHINI/RepRise) and select `main` as the production branch.
 2. Build from the repository root. Netlify reads Node.js 24 from `.nvmrc` and uses the build command and `.next` publish directory in `netlify.toml`. The Next.js adapter serves page routes and `/api/health`.
 3. For a demo deployment, leave the Firebase variables unset. For real accounts, set all six Firebase Web variables before building, deploy the Firestore rules and indexes to that project, and add the Netlify hostname to Firebase Auth authorized domains. Redeploy after changing environment variables.
-4. Open the site over HTTPS and check `/api/health`. To run the demo browser suite against the deployment, set `PLAYWRIGHT_BASE_URL` to the site URL and run `npm run test:demo:ui`.
+4. Open the site over HTTPS and check `/api/health`. To run the demo browser suite against the deployment, set `PLAYWRIGHT_BASE_URL` to the site URL and run `npm run test:demo:ui`. For a deployment with Firebase enabled, also set `PLAYWRIGHT_FIREBASE_CONFIGURED=1` so the suite starts each test in Bob's workspace and checks the real sign-in page.
 
 See [Next.js on Netlify](https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/).
 

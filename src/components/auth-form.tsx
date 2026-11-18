@@ -61,15 +61,6 @@ export function AuthForm({ setupOnly = false }: { setupOnly?: boolean }) {
           ? "Your sign-in account is ready. Choose a unique username to continue."
           : "Your progress, synced to your account."}
       </p>
-      {!setupOnly && (
-        <button
-          type="button"
-          className="button secondary mb-5 full"
-          onClick={enterDemo}
-        >
-          Continue in demo mode
-        </button>
-      )}
       <form onSubmit={submit} className="panel login-form">
         {!setupOnly && (
           <>
@@ -171,6 +162,16 @@ export function AuthForm({ setupOnly = false }: { setupOnly?: boolean }) {
                     : "Forgot password?"}
               </button>
             ))}
+          {mode === "login" && (
+            <button
+              type="button"
+              className="self-center underline underline-offset-4"
+              disabled={busy}
+              onClick={enterDemo}
+            >
+              Bob (demo login)
+            </button>
+          )}
         </div>
       )}
     </div>

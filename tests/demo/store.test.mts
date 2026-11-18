@@ -157,7 +157,7 @@ test("sample friend consent, search, removal and reset work entirely offline", a
   );
   store.resetDemo();
   assert.equal(store.demoSnapshot().requests.length, 2);
-  assert.equal(store.demoSnapshot().profile.displayName, "Alex Johnson");
+  assert.equal(store.demoSnapshot().profile.displayName, "Bob");
   assert.equal(getApps().length, 0);
 });
 test("blocked or malformed demo storage falls back to memory and never enables a real account", () => {

@@ -281,8 +281,12 @@ function AuthGate({
           {error}
         </p>
         <div className="flex flex-wrap gap-3">
-          <button className="button primary" onClick={enterDemo}>
-            Continue in demo mode
+          <button
+            type="button"
+            className="self-center underline underline-offset-4"
+            onClick={enterDemo}
+          >
+            Bob (demo login)
           </button>
           {firebaseConfigured && (
             <button className="button secondary" onClick={retry}>

@@ -1,7 +1,14 @@
 import { exercises } from "../../src/data/exercises";
 import { test, expect, type Page } from "@playwright/test";
 const errors = new WeakMap<Page, string[]>();
+const firebaseConfigured = process.env.PLAYWRIGHT_FIREBASE_CONFIGURED === "1";
 test.beforeEach(async ({ page }) => {
+  if (firebaseConfigured) {
+    await page.addInitScript(() => {
+      const key = "gymsense:mode:v1";
+      if (!sessionStorage.getItem(key)) sessionStorage.setItem(key, "demo");
+    });
+  }
   const messages: string[] = [];
   errors.set(page, messages);
   page.on("pageerror", (error) => messages.push(error.message));
@@ -19,11 +26,11 @@ test.beforeEach(async ({ page }) => {
 test.afterEach(async ({ page }) => {
   expect(errors.get(page)).toEqual([]);
 });
-test("every previously blocked screen opens automatically without configuration", async ({
+test("every main screen opens in demo mode", async ({
   page,
 }) => {
   for (const [path, title] of [
-    ["/dashboard", /Welcome back, Alex/],
+    ["/dashboard", /Welcome back, Bob/],
     ["/run", "One step. Then the next."],
     ["/friends", "Find your people."],
     ["/profile", "Your effort has a story."],
@@ -125,7 +132,7 @@ test("an outdoor GPS run appears in profile history", async ({
     page.getByRole("heading", { name: "Outdoor GPS", exact: true }),
   ).toBeVisible();
 });
-test("Firebase login and demo re-entry work without configuration", async ({
+test("Firebase login and Bob demo re-entry work", async ({
   page,
 }) => {
   await page.goto("/dashboard");
@@ -133,10 +140,13 @@ test("Firebase login and demo re-entry work without configuration", async ({
     .getByRole("button", { name: "Firebase login", exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: "Try RepRise", exact: true }),
+    page.getByRole("heading", {
+      name: firebaseConfigured ? "Welcome back." : "Try RepRise",
+      exact: true,
+    }),
   ).toBeVisible();
   await page
-    .getByRole("button", { name: "Continue in demo mode", exact: true })
+    .getByRole("button", { name: "Bob (demo login)", exact: true })
     .click();
   await expect(page).toHaveURL(/\/$/);
   await expect(
@@ -289,7 +299,7 @@ test("extension-injected root attributes do not cause hydration warnings", async
   });
   await page.goto("/dashboard");
   await expect(
-    page.getByRole("heading", { name: /Welcome back, Alex/ }),
+    page.getByRole("heading", { name: /Welcome back, Bob/ }),
   ).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute(
     "data-liner-extension-version",

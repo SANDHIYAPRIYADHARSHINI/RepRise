@@ -97,8 +97,8 @@ function initialState(): DemoState {
     version: 1,
     profile: {
       ...DEMO_USER,
-      username: "alexj_demo",
-      displayName: "Alex Johnson",
+      username: "bob_demo",
+      displayName: "Bob",
       photoURL: null,
       goal: "weight-gain",
       fitnessLevel: "beginner",
