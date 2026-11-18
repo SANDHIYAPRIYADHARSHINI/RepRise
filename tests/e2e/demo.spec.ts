@@ -29,9 +29,7 @@ test.beforeEach(async ({ page }) => {
 test.afterEach(async ({ page }) => {
   expect(errors.get(page)).toEqual([]);
 });
-test("every main screen opens in demo mode", async ({
-  page,
-}) => {
+test("every main screen opens in demo mode", async ({ page }) => {
   for (const [path, title] of [
     ["/dashboard", /Welcome back, Bob/],
     ["/run", "One step. Then the next."],
@@ -135,9 +133,7 @@ test("an outdoor GPS run appears in profile history", async ({
     page.getByRole("heading", { name: "Outdoor GPS", exact: true }),
   ).toBeVisible();
 });
-test("Firebase login and Bob demo re-entry work", async ({
-  page,
-}) => {
+test("Firebase login and Bob demo re-entry work", async ({ page }) => {
   await page.goto("/dashboard");
   if (firebaseConfigured) openingAccountLogin.add(page);
   await page
@@ -149,6 +145,13 @@ test("Firebase login and Bob demo re-entry work", async ({
       exact: true,
     }),
   ).toBeVisible();
+  if (firebaseConfigured) {
+    await page.goto("/");
+    await expect(page).toHaveURL(/\/login$/);
+    await expect(
+      page.getByRole("heading", { name: "Welcome back.", exact: true }),
+    ).toBeVisible();
+  }
   await page
     .getByRole("button", { name: "Bob (demo login)", exact: true })
     .click();

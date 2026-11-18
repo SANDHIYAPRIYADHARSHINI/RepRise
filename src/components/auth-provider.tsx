@@ -251,16 +251,18 @@ function AuthGate({
   const { user, profile, loading, error, logout, enterDemo } = useAuth();
   const path = usePathname(),
     router = useRouter();
-  const protectedRoute = [
-    "/dashboard",
-    "/plan",
-    "/workout",
-    "/diet",
-    "/run",
-    "/friends",
-    "/profile",
-    "/exercises",
-  ].some((p) => path === p || path.startsWith(p + "/"));
+  const protectedRoute =
+    path === "/" ||
+    [
+      "/dashboard",
+      "/plan",
+      "/workout",
+      "/diet",
+      "/run",
+      "/friends",
+      "/profile",
+      "/exercises",
+    ].some((p) => path === p || path.startsWith(p + "/"));
   useEffect(() => {
     if (loading || error) return;
     if (protectedRoute && !user) router.replace("/login");
